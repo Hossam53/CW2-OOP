@@ -1,0 +1,77 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class ReadingListPlanner {
+
+    private ReadingListItemStore authorStore;
+    private PrizeWinnerStore prizeWinnerStore;
+    private BookStore bookStore;
+
+    public ReadingListPlanner(ReadingListItemStore authorStore, PrizeWinnerStore prizeWinnerStore, BookStore bookStore) {
+        this.authorStore = authorStore;
+        this.prizeWinnerStore = prizeWinnerStore;
+        this.bookStore = bookStore;
+    }
+
+    public List<String> generate(String input) {
+        List<String> result = new ArrayList<>();
+        String lowerCaseInput = input.toLowerCase();
+        int numOfPrize = 0;
+        int numOfBook = 0;
+
+        // Get items from authorStore
+
+        for (char c : input.toCharArray()) {
+            String character = Character.toString(c);
+
+            if (result.size() < 1) {
+                String author = authorStore.getRandomItem(String.valueOf(c));
+                result.add(author);
+
+            }
+
+
+            // Get items from prizeWinnerStore
+            else if (result.size() < 2) {
+                String prizeWinner = prizeWinnerStore.getRandomItem(character);
+                result.add(prizeWinner);
+
+            } else if (numOfPrize < numOfBook) {
+                String prizeWinner = prizeWinnerStore.getRandomItem(character);
+                result.add(prizeWinner);
+
+
+
+
+            }else {
+                String Book =bookStore.getRandomItem(character);
+                result.add(Book);
+                numOfBook++;
+            }
+
+        }
+        return result;
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        if (args.length != 1) {
+            System.out.println("Usage: java ReadingListPlanner <input>");
+            return;
+        }
+
+        ReadingListItemStore authorStore = new ReadingListItemStore("authors.txt");
+        PrizeWinnerStore prizeWinnerStore = new PrizeWinnerStore("prize-winners.txt");
+        BookStore bookStore = new BookStore("books.txt");
+        ReadingListPlanner planner = new ReadingListPlanner(authorStore, prizeWinnerStore, bookStore);
+
+
+        List<String> result = planner.generate(args[0]);
+        for (String item : result){
+            System.out.println(item);
+        }
+    }
+
+}
