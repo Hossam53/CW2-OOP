@@ -1,21 +1,26 @@
-import java.io.IOException;
 public class BookStore extends ReadingListItemStore {
 
-
+    // Default constructor, calls super constructor with no arguments
     public BookStore(){
         super();
     }
-    public BookStore(String filename) throws IOException {
+
+    // Constructor that takes a filename, calls super constructor with filename
+    public BookStore(String filename)   {
         super(filename);
     }
-    public BookStore(String filename, int length) throws IOException {
+
+    // Constructor that takes a filename and length, calls super constructor with filename and length
+    public BookStore(String filename, int length)  {
         super(filename, length);
     }
 
-
+    // Overrides the getRandomItem method in the parent class
     @Override
     public String getRandomItem(String key) {
         String item = super.getRandomItem(key);
+
+        // If item is not null, extract year from the title and add year category
         if (item != null) {
             String[] parts = item.split(" ", 2);
             String titleAuthor = parts[0];
@@ -30,9 +35,10 @@ public class BookStore extends ReadingListItemStore {
                 yearCategory = "(classic)";
             }
             return titleAuthor + " " + yearCategory;
+
+            // If item is null, return null
         } else {
             return null;
         }
     }
-
 }
