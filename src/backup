@@ -75,3 +75,30 @@ public class ReadingListPlanner {
     }
 
 }
+  public ReadingListItemStore(String fileName, int PrefixLength) {
+
+        this();
+        try {
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String item = line.trim().toLowerCase();
+                    for (int i = 1; i <= PrefixLength && i <= item.length(); i++) {
+                        String key = item.substring(0, i).toUpperCase();
+                        put(key, item);
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (NullPointerException e) {
+            System.out.println("A null pointer exception occurred: " + e.getMessage());
+
+
+
+        }
+
+
+
+    }
